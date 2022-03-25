@@ -1,0 +1,51 @@
+---
+title: "ttt_spectral"
+author: "Etienne Côme"
+date: "25/03/2022"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## R Markdown
+
+This is an R Markdown presentation. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document.
+
+
+## Dollars dans TTT
+
+```{r cars, echo = TRUE}
+library(ttt)
+library(ggplot2)
+data("dollars")
+ei = eigen(dollars$OD)
+dollars.ei=data.frame(cumvar=cumsum(ei$values),var=ei$values,rang=1:12)
+ggplot(dollars.ei)+
+  geom_line(aes(x=rang,y=cumvar))+
+  geom_point(aes(x=rang,y=cumvar))
+```
+
+## Rmks in the paper
+
+<i>These two items are seriously flawed although perhaps promising. In particular, though the table used is not symmetric, the maps that my rendering program shows them are in the form of symmetric moves. This is easily fixed and can be remedied with my program to show two-way moves, and MATLAB allowed the computation of eigenvalues of the asymmetric matrix, but the analysis is still not satisfactory. I am currently looking at Laplacians on Riemann manifolds hoping that I can somehow incorporate the spatial topology into the analysis. Another possible difficulty is that movement tables are always with considerable spatial autocorrelation, but this should also be the case in the partial component tables, and it is desirable to preserve this fact.</i>
+in An experiment in FILTERING OF GEOGRAPHIC MOVEMENT TABLES†
+
+## Bloc diagonal
+
+```{r, echo = TRUE}
+library(greed)
+sbm=rsbm(500,rep(1/3,3),diag(rep(1,3)))
+ei = eigen(sbm$x)
+ei$values[1:5]
+sol=greed(ei$vectors[,1:3],DiagGmm())
+```
+
+## Bloc diagonal 
+
+```{r, echo = TRUE}
+gmmpairs(sol,as.data.frame(ei$vectors[,1:3]))
+```
